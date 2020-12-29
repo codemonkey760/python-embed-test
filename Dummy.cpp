@@ -1,31 +1,47 @@
 #include "Dummy.h"
 
-static PyObject* dummy_print(PyObject *self, PyObject *args)
-{
-    char const *arg;
+typedef struct {
+    PyObject_HEAD
+    double a;
+    double b;
+} DummyObject;
 
-    if (!PyArg_ParseTuple(args, "s", &arg)) {
-        return nullptr;
-    }
-
-    cout << arg << endl;
-
-    return PyUnicode_FromString("Bye from C++");
-}
-
-static PyMethodDef DummyMethods[] = {
-        {"print", dummy_print, METH_VARARGS, "Print a string to stdout"},
-        {nullptr, nullptr, 0, nullptr}
+static PyTypeObject DummyType = {
+    PyVarObject_HEAD_INIT(nullptr, 0)
+    .tp_name = "dummy.Dummy",
+    .tp_basicsize = sizeof(DummyObject),
+    .tp_itemsize = 0,
+    .tp_flags = Py_TPFLAGS_DEFAULT,
+    .tp_doc = "Dummy Objects",
+    .tp_new = PyType_GenericNew,
 };
 
-struct PyModuleDef dummy_module = {
+static PyModuleDef dummy_module = {
         PyModuleDef_HEAD_INIT,
         "dummy",
         nullptr,
         -1,
-        DummyMethods
 };
 
-PyMODINIT_FUNC PyInit_dummy() {
-    return PyModule_Create(&dummy_module);
+PyMODINIT_FUNC PyInit_dummy()
+{
+    PyObject *module = nullptr;
+    if (PyType_Ready(&DummyType) < 0) {
+        return nullptr;
+    }
+
+    module = PyModule_Create(&dummy_module);
+    if (module == nullptr) {
+        return nullptr;
+    }
+
+    Py_INCREF(&DummyType);
+    if (PyModule_AddObject(module, "Dummy", (PyObject *) &DummyType) < 0) {
+        Py_DECREF(&DummyType);
+        Py_DECREF(module);
+
+        return nullptr;
+    }
+
+    return module;
 }

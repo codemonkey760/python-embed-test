@@ -1,4 +1,5 @@
-import dummy
+from dummy import Dummy
 
-ret = dummy.print("Hello from python");
-print(ret)
+a = Dummy()
+
+print(a)
