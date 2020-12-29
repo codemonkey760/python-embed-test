@@ -21,12 +21,8 @@ static PyObject * Dummy_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
         return nullptr;
     }
 
-    self->message = PyUnicode_FromString("");
-    if (nullptr == self->message) {
-        Py_DECREF(self);
-
-        return nullptr;
-    }
+    self->message = Py_None;
+    Py_INCREF(self->message);
 
     self->a = 0.0;
     self->b = 0.0;

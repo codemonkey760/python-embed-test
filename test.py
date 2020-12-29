@@ -1,7 +1,7 @@
 from dummy import Dummy
 
 x = Dummy(message="Oh no", a=1.5, b=2.5)
-y = Dummy()
+y = Dummy(0.5, 1.2)
 
 print("Object x")
 print(x.a)
