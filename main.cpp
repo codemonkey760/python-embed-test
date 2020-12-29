@@ -10,12 +10,17 @@ int main(int argc, char **argv) {
 
     Py_Initialize();
 
-    char const *file_name = "test.py";
+    PyObject *className = PyUnicode_FromString("Tester");
+    PyObject *fromList = PyList_New(0);
+    PyList_Append(fromList, className);
+    PyObject *imports = PyImport_ImportModuleEx("test2", nullptr, nullptr, fromList);
 
-    FILE *fp = fopen(file_name, "r");
-    PyRun_AnyFile(fp, file_name);
-    fclose(fp);
-    fp = nullptr;
+//    char const *file_name = "test.py";
+//
+//    FILE *fp = fopen(file_name, "r");
+//    PyRun_AnyFile(fp, file_name);
+//    fclose(fp);
+//    fp = nullptr;
 
     Py_Finalize();
 
