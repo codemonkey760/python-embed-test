@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.17)
+set(CMAKE_CXX_STANDARD 14)
 project(python_embed_test)
 
 find_package(Python COMPONENTS Development)
 
-set(CMAKE_CXX_STANDARD 14)
+configure_file(test.py ${CMAKE_CURRENT_BINARY_DIR}/test.py COPYONLY)
 
 add_executable(
         python_embed_test

@@ -10,7 +10,7 @@ static PyObject* dummy_print(PyObject *self, PyObject *args)
 
     cout << arg << endl;
 
-    return PyUnicode_FromString("Bye");
+    return PyUnicode_FromString("Bye from C++");
 }
 
 static PyMethodDef DummyMethods[] = {
