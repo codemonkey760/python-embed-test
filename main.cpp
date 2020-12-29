@@ -1,5 +1,9 @@
 #include <Python.h>
+#include <iostream>
 #include "Dummy.h"
+
+using std::endl;
+using std::cerr;
 
 int main(int argc, char **argv) {
     wchar_t *program = Py_DecodeLocale(argv[0], nullptr);
@@ -10,10 +14,26 @@ int main(int argc, char **argv) {
 
     Py_Initialize();
 
-    PyObject *className = PyUnicode_FromString("Tester");
-    PyObject *fromList = PyList_New(0);
-    PyList_Append(fromList, className);
-    PyObject *imports = PyImport_ImportModuleEx("test2", nullptr, nullptr, fromList);
+    PyObject *module = PyImport_ImportModule("test2");
+    PyObject *testerType = PyObject_GetAttrString(module, "Tester");
+
+    if (nullptr == testerType) {
+        cerr << "Could not locate constructor" << endl;
+
+        Py_Finalize();
+
+        exit(1);
+    }
+    cout << "Constructor located" << endl;
+
+    PyObject *testerInstance = PyType_GenericNew((PyTypeObject *) testerType, nullptr, nullptr);
+
+    cout << ((nullptr == testerInstance) ? "Instance is null" : "Instance is not null") << endl;
+
+    PyObject *testerA = PyObject_GetAttrString(testerInstance, "a");
+    cout << ((nullptr == testerA) ? "tester instance has an \"a\" attribute" : "no \"a\" was found");
+
+    cout << "tester.a = " << PyLong_AsLong(testerA) << endl;
 
 //    char const *file_name = "test.py";
 //
